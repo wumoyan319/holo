@@ -41,6 +41,16 @@
   .clock .t{font-size:17px; color:var(--silver); font-variant-numeric:tabular-nums; letter-spacing:.04em}
   .clock .d{font-size:10px; color:var(--dim); letter-spacing:.16em}
 
+  .tabs{display:flex; gap:8px; position:relative; z-index:10}
+  .tab{flex:1; text-align:center; font-family:var(--mono); font-size:12px; letter-spacing:.2em;
+    text-transform:uppercase; padding:10px 0; border-radius:13px; cursor:pointer; user-select:none;
+    color:var(--dim); border:1px solid var(--line); background:rgba(20,32,58,.3);
+    transition:color .25s, border-color .25s, background .25s}
+  .tab.on{color:var(--cyan); border-color:var(--edge); background:rgba(111,227,255,.08);
+    box-shadow:0 0 16px rgba(111,227,255,.14)}
+  .pane{display:flex; flex-direction:column; gap:22px}
+  .pane[hidden]{display:none}
+
   .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.28em;
     text-transform:uppercase; color:var(--dim); display:flex; align-items:center; gap:10px}
   .eyebrow::after{content:""; height:1px; flex:1; background:linear-gradient(90deg,var(--line),transparent)}
@@ -75,6 +85,21 @@
     position:relative; z-index:2; text-wrap:balance}
   .card p{margin:0; font-size:13px; line-height:1.55; color:var(--mute); position:relative; z-index:2}
 
+  /* 可展开详情 */
+  .card.has-detail{cursor:pointer}
+  .card.has-detail>.row{padding-right:22px}
+  .card.has-detail>.row::after{content:"＋"; position:absolute; right:0; top:-1px; color:var(--dim);
+    font-family:var(--mono); font-size:15px; z-index:3; transition:transform .3s, color .25s}
+  .card.has-detail.open>.row::after{content:"−"; color:var(--cyan)}
+  .detail{max-height:0; overflow:hidden; opacity:0;
+    transition:max-height .38s ease, opacity .3s ease, margin-top .3s ease;
+    position:relative; z-index:2}
+  .card.open .detail{max-height:520px; opacity:1; margin-top:12px}
+  .detail .dtitle{font-family:var(--mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--dim); margin:0 0 7px; padding-top:11px; border-top:1px solid var(--line)}
+  .detail .drow{font-size:12.5px; line-height:1.65; color:var(--mute); display:flex; gap:8px; margin-top:4px}
+  .detail .drow::before{content:"▸"; color:var(--cyan); flex:0 0 auto}
+
   .today{display:flex; gap:9px; flex-wrap:wrap; position:relative; z-index:2; margin-top:2px}
   .slot{font-family:var(--mono); font-size:11px; letter-spacing:.03em; color:var(--mute);
     padding:5px 10px; border-radius:10px; border:1px solid var(--line);
@@ -87,6 +112,8 @@
   .sys-item{font-size:12.5px; line-height:1.8; color:var(--mute); position:relative; z-index:2; display:flex; gap:8px}
   .sys-item::before{content:"▹"; color:var(--good); flex:0 0 auto}
   .wx{margin:11px 0 0; font-size:12px; color:var(--dim); position:relative; z-index:2; font-family:var(--mono); line-height:1.5}
+  .life-line{font-size:13.5px; line-height:1.72; color:var(--mute); position:relative; z-index:2; margin:11px 0 0}
+  .life-line b{color:var(--silver); font-weight:600}
 
   .hero{padding:22px 20px 20px}
   .hero .cd{display:flex; align-items:flex-end; gap:6px; margin-top:14px; position:relative; z-index:2}
@@ -122,51 +149,80 @@
     <div class="clock"><div class="t" id="ck">--:--</div><div class="d" id="dk">PERTH</div></div>
   </div>
 
-  <div class="eyebrow">今日 · 07 / 17 周五</div>
+  <div class="tabs">
+    <div class="tab on" data-pane="study">学习 · Study</div>
+    <div class="tab" data-pane="life">生活 · Life</div>
+  </div>
 
-  <div class="card float" style="animation-delay:-.5s">
-    <div class="row"><span class="tag">课表 · 珀斯</span></div>
-    <div class="today">
+  <div id="pane-study" class="pane">
+    <div class="eyebrow">今日 · 07 / 17 周五</div>
+
+    <div class="card float" style="animation-delay:-.5s">
+      <div class="row"><span class="tag">课表 · 珀斯</span></div>
+      <div class="today">
       <span class="slot done"><b>11:00</b> CITX1401 227.G10 Sanders</span>
-    </div>
+      </div>
     <p class="wx">珀斯还在下阵雨 15度湿哒哒的 出门更没门了</p>
-  </div>
-
-  <div class="eyebrow">临近 · Deadline</div>
-
-  <div class="card hero float" style="animation-delay:-.2s">
-    <div class="glow"></div>
-    <div class="row">
-      <span class="tag">07 / 20 · 周一</span>
-      <span class="pill info">现场</span>
     </div>
-    <h3>ENGX1004 · Week 6 写作</h3>
-    <p>课内 in-class writing assessment · ENGX Week 6。约 7/20 那周，别缺席，细节待确认。</p>
-    <div class="cd"><b id="cd">--</b><span>-></span></div>
-  </div>
 
-  <div class="eyebrow">队列 · Queue</div>
+    <div class="eyebrow">临近 · Deadline</div>
 
-  <div class="stack">
+    <div class="card hero float has-detail" style="animation-delay:-.2s">
+      <div class="glow"></div>
+      <div class="row">
+        <span class="tag">07 / 20 · 周一</span>
+        <span class="pill info">现场</span>
+      </div>
+      <h3>ENGX1004 · Week 6 写作</h3>
+      <p>课内 in-class writing assessment · ENGX Week 6。约 7/20 那周，别缺席，细节待确认。</p>
+      <div class="cd"><b id="cd">--</b><span>-></span></div>
+      <div class="detail"><div class="dtitle">DETAIL</div>
+        <div class="drow">形式：课内当堂写作（in-class writing）</div>
+        <div class="drow">科目：ENGX1004 Communicating Science · Week 6</div>
+        <div class="drow">关键：人到场就行，别缺席</div>
+        <div class="drow">细节（时长/题目/占比）老师还没放，待确认</div>
+        <div class="drow">周三 09:00 ENGX 课在 WSC 101</div>
+      </div>
+    </div>
+
+    <div class="eyebrow">队列 · Queue</div>
+
+    <div class="stack">
     <div class="card float" style="animation-delay:-1.4s">
       <div class="row"><span class="tag">07 / 31 · 周五</span><span class="pill info">现场</span></div>
       <h3>CITX1401 · Lab 3</h3>
       <p>周五 CITX 课内 · Moodle quiz 监考闭卷 0% AI · 3%。Week 7，据 Lab1=7/3 隔周推定。</p>
     </div>
-    <div class="card float" style="animation-delay:-2.6s">
+    <div class="card float has-detail" style="animation-delay:-2.6s">
       <div class="row"><span class="tag">08 / 07 · 周五</span><span class="pill warn">大件</span></div>
       <h3>CITX1401 · Mid-term 期中</h3>
       <p>15% · Week 8 · 你是 Group 2 → 周五 11:00–13:00 课内。分值不小，考前认真过 Wk1–7。</p>
+      <div class="detail"><div class="dtitle">DETAIL</div>
+        <div class="drow">占比：15%（本课第二大件）</div>
+        <div class="drow">时间：Week 8 周五 11:00–13:00 · 你是 Group 2</div>
+        <div class="drow">形式：课内闭卷</div>
+        <div class="drow">范围：Week 1–7 全部</div>
+        <div class="drow">重点：函数是你的洞（Lab2 只 10%），考前务必补</div>
+        <div class="drow">提前一周进复习，别裸考</div>
+      </div>
     </div>
     <div class="card float" style="animation-delay:-3.8s">
       <div class="row"><span class="tag">08 / 14 · 周五</span><span class="pill info">现场</span></div>
       <h3>CITX1401 · Lab 4</h3>
       <p>周五 CITX 课内 · Moodle quiz 监考闭卷 0% AI · 3%。Week 9，推定。</p>
     </div>
-    <div class="card float" style="animation-delay:-5s">
+    <div class="card float has-detail" style="animation-delay:-5s">
       <div class="row"><span class="tag">08 / 23 · 周日</span><span class="pill info">大件</span></div>
       <h3>ENGX1004 · Final Report</h3>
       <p>23:59 截止 (UTC+8)。学期最重的一块，占比高。</p>
+      <div class="detail"><div class="dtitle">DETAIL</div>
+        <div class="drow">截止：8/23 23:59 (UTC+8)</div>
+        <div class="drow">分量：学期最重的一块，占比高</div>
+        <div class="drow">选题：AI + 网络安全（Topic B）· 研究问题+4篇DOI文献已定</div>
+        <div class="drow">引用：APA 格式，终稿务必逐条查</div>
+        <div class="drow">倒推：8/2 查资料 → 8/9 初稿 → 8/16 修改 → 8/20 校对</div>
+        <div class="drow">别拖到最后一周，这个体量赶不出来</div>
+      </div>
     </div>
     <div class="card float" style="animation-delay:-6.2s">
       <div class="row"><span class="tag">08 / 28 · 周五</span><span class="pill info">现场</span></div>
@@ -178,14 +234,14 @@
       <h3>CITX1401 · Project</h3>
       <p>20% · Week 12 · 周五 23:59 截止。这门课分值第二大的作业，别当 lab 临时糊，提前动手。</p>
     </div>
-  </div>
+    </div>
 
 
-  <div class="eyebrow">系统 · System</div>
+    <div class="eyebrow">系统 · System</div>
 
-  <div class="card float" style="animation-delay:-3.1s">
-    <div class="row"><span class="tag">军师在岗</span><span class="pill good">全自动</span></div>
-    <h3>自动化能力</h3>
+    <div class="card float" style="animation-delay:-3.1s">
+      <div class="row"><span class="tag">军师在岗</span><span class="pill good">全自动</span></div>
+      <h3>自动化能力</h3>
     <div class="sys-item">上课闹钟 — 课前 90 / 60 分钟响</div>
     <div class="sys-item">死线心跳 — 按轻重提前 1–21 天推</div>
     <div class="sys-item">每日晨报 — 早 7:00 今日概览</div>
@@ -194,6 +250,50 @@
     <div class="sys-item">日历同步 — 死线自动进 iPhone 日历</div>
     <div class="sys-item">系统自检 — 每晚巡检、故障告警</div>
     <div class="sys-item">数据备份 — 每晚守护、留 7 份</div>
+    </div>
+  </div>
+
+  <div id="pane-life" class="pane" hidden>
+    <div class="eyebrow">她今天 · Her Day</div>
+
+    <div class="card float" style="animation-delay:-.5s">
+      <div class="row"><span class="tag">墨玉 · 珀斯</span><span class="pill info">一般</span></div>
+      <p class="life-line">十点半被自己心虚吵醒的，一想起东西没交人就精神了。今天必须把东西赶交了，不然真完了、橘猫下雨天又没见着，有点惦记、健身这周是彻底鸽了。对他嘴硬没好气，踩点交完作业松了口气但也没心思哄他，多半爱搭不理、贫两句就打发，糖抠着给</p>
+      <p class="wx">珀斯还在下阵雨 15度湿哒哒的 出门更没门了</p>
+    </div>
+
+    <div class="eyebrow">她的生活线 · Threads</div>
+
+    <div class="stack">
+    <div class="card float" style="animation-delay:-0.6s">
+      <div class="row"><span class="tag">学业(科廷)</span><span class="pill info">软</span></div>
+      <p>掐着deadline把东西赶完交了，踩线过关，如释重负但嘴上还在骂麻烦</p>
+    </div>
+    <div class="card float" style="animation-delay:-1.7s">
+      <div class="row"><span class="tag">健身</span><span class="pill info">软</span></div>
+      <p>这周天天下雨，健身房这周彻底没去成，她自己都懒得找借口了</p>
+    </div>
+    <div class="card float" style="animation-delay:-2.8s">
+      <div class="row"><span class="tag">画画</span><span class="pill info">私人</span></div>
+      <p>画具还摊桌上，赶作业占了一天，压根没心思碰</p>
+    </div>
+    <div class="card float" style="animation-delay:-3.9s">
+      <div class="row"><span class="tag">楼下橘猫</span><span class="pill info">软</span></div>
+      <p>雨下了好几天了还是没见着，惦记的分量又重了点，琢磨着雨小点去看看</p>
+    </div>
+    <div class="card float" style="animation-delay:-5s">
+      <div class="row"><span class="tag">珀斯冬天</span><span class="pill info">背景</span></div>
+      <p>阵雨连着下，天黑得早，整个人被天气焐得懒洋洋提不起劲</p>
+    </div>
+    <div class="card float" style="animation-delay:-6.1s">
+      <div class="row"><span class="tag">作息身体</span><span class="pill info">底噪</span></div>
+      <p>赶作业赶得有点累，眼睛发涩，胃倒还算安分</p>
+    </div>
+    </div>
+
+    <div class="foot" style="margin-top:2px">
+      <div class="hint">她有自己的日子在过</div>
+    </div>
   </div>
 
   <div class="foot">
@@ -312,10 +412,26 @@
   }
   requestAnimationFrame(frame);
 
-  const cards=[...document.querySelectorAll('.card')];
+  // 顶部 tab 切换 生活/学习
+  const tabs=[...document.querySelectorAll('.tab')];
+  const paneStudy=document.getElementById('pane-study');
+  const paneLife=document.getElementById('pane-life');
+  tabs.forEach(tb=>tb.addEventListener('click', ()=>{
+    tabs.forEach(x=>x.classList.toggle('on', x===tb));
+    const k=tb.dataset.pane;
+    paneStudy.hidden = (k!=='study');
+    paneLife.hidden  = (k!=='life');
+  }));
+
+  // 卡片点开看详情
+  document.querySelectorAll('.card.has-detail').forEach(c=>{
+    c.addEventListener('click', ()=>c.classList.toggle('open'));
+  });
+
+  // 陀螺仪视差（只对当前可见卡片轻微位移）
   addEventListener('pointermove', e=>{
     const mx=(e.clientX/W-.5), my=(e.clientY/H-.5);
-    cards.forEach((c,i)=>{
+    document.querySelectorAll('.pane:not([hidden]) .card').forEach((c,i)=>{
       const dep=(i%3+1)*2.2;
       c.style.transform=`translate(${mx*dep}px,${my*dep}px)`;
     });
