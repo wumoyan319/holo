@@ -155,6 +155,9 @@
   </div>
 
   <div id="pane-study" class="pane">
+    <div class="eyebrow" id="jn-eyebrow" hidden>军师留言 · Note</div>
+    <div class="stack" id="junshi-note" hidden></div>
+
     <div class="eyebrow">今日 · 07 / 18 周六</div>
 
     <div class="card float" style="animation-delay:-.5s">
@@ -429,6 +432,27 @@
   document.querySelectorAll('.card.has-detail').forEach(c=>{
     c.addEventListener('click', ()=>c.classList.toggle('open'));
   });
+
+  // 军师留言板：读同目录 note.json（军师/手机 Claude 写它，本机重建 index.html 不覆盖它）。
+  // 空则整块隐藏；有内容才在"学习"页顶部亮出来。带时间戳防缓存，每次打开都拉最新。
+  (function loadNote(){
+    const esc = s => String(s==null?'':s).replace(/[<>&]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+    fetch('note.json?t='+Date.now(), {cache:'no-store'})
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if(!d || !Array.isArray(d.items) || !d.items.length) return;
+        const wrap = document.getElementById('junshi-note');
+        const eb = document.getElementById('jn-eyebrow');
+        wrap.innerHTML = d.items.map(it=>{
+          const k = ['info','warn','crit','good'].includes(it.kind) ? it.kind : 'info';
+          const pill = it.time ? `<span class="pill ${k}">${esc(it.time)}</span>` : '';
+          return `<div class="card float"><div class="row"><span class="tag">军师</span>${pill}</div>`+
+                 `<p style="margin-top:9px">${esc(it.text)}</p></div>`;
+        }).join('');
+        eb.hidden = false; wrap.hidden = false;
+      })
+      .catch(()=>{});
+  })();
 
   // 陀螺仪视差（只对当前可见卡片轻微位移）
   addEventListener('pointermove', e=>{
