@@ -176,55 +176,30 @@
     <div class="card float" style="animation-delay:-.5s">
       <div class="row"><span class="tag">课表 · 珀斯</span></div>
       <div class="today">
-      <span class="slot"><b>11:00</b> ENGX1004 WSC 101</span>
-      <span class="slot"><b>16:00</b> MKTX1203 WSC 109A</span>
+      <span class="slot done"><b>11:00</b> ENGX1004 WSC 101</span>
+      <span class="slot done"><b>16:00</b> MKTX1203 WSC 109A</span>
       </div>
     <p class="wx">珀斯今天总算不下雨了，风也小了，就是阴着更冷，体感11度，比周末那阵雨风消停多了但也没暖到哪去</p>
     </div>
 
     <div class="eyebrow">临近 · Deadline</div>
 
-    <div class="card hero float has-detail" style="animation-delay:-.2s">
+    <div class="card hero float " style="animation-delay:-.2s">
       <div class="glow"></div>
       <div class="row">
-        <span class="tag">09 / 21 · 周一</span>
-        <span class="pill crit">期末</span>
+        <span class="tag">11 / 30 · 周一</span>
+        <span class="pill info">杂项</span>
       </div>
-      <h3>MKTX1203 · 期末考 Final Exam</h3>
-      <p>45% · 9/21(周一) 09:00 · IQX(Masonic Hall) · 2 小时 · 闭卷 · Approved Aids = None（什么都不能带）。同一天下午还有 CITX 期末。</p>
-      <div class="cd"><b id="cd">--</b><span>距 MKTX 期末</span></div>
-      <div class="detail"><div class="dtitle">DETAIL</div>
-        <div class="drow">⏰ 9/21(周一) 09:00-11:00 · IQX</div>
-        <div class="drow">占比 45% —— 这门课最大的一块</div>
-        <div class="drow">闭卷，Approved Aids 明写 None：不许带计算器、不许带笔记</div>
-        <div class="drow">⚠️ 同一天 14:00 还有 CITX 期末，一天两场</div>
-        <div class="drow">IQX = Masonic Hall，Stirling Hwy 和 Broadway 路口（地图搜 Masonic Hall），不在主校区</div>
-        <div class="drow">考前务必去 UWA Campus Map 确认位置，别当天找不到</div>
-        <div class="drow">缓考走 EVA 流程</div>
-      </div>
+      <h3>INDG1000 · Part 3 课程反馈</h3>
+      <p>23:59 截止 (UTC+8)。全校必修的 Indigenous Studies Essentials 模块，不占专业课分但不做会挂在记录上。花十几分钟点完即可。</p>
+      <div class="cd"><b id="cd">--</b><span>-></span></div>
+
     </div>
 
     <div class="eyebrow">队列 · Queue</div>
 
     <div class="stack">
-    <div class="card float has-detail" style="animation-delay:-1.4s">
-      <div class="row"><span class="tag">09 / 21 · 周一</span><span class="pill crit">期末</span></div>
-      <h3>CITX1401 · 期末考 Final Exam</h3>
-      <p>50% · 9/21(周一) 14:00 · IQX(Masonic Hall) · 2 小时 · 闭卷 · Approved Aids = None。这是全学期单项最大的一块。</p>
-      <div class="detail"><div class="dtitle">DETAIL</div>
-        <div class="drow">⏰ 9/21(周一) 14:00-16:00 · IQX</div>
-        <div class="drow">占比 50% —— 全学期单项最大，比 project 还大一倍多</div>
-        <div class="drow">闭卷，Approved Aids 明写 None</div>
-        <div class="drow">⚠️ 同一天上午 09:00 刚考完 MKTX，中间只有午休</div>
-        <div class="drow">范围推定 Week1-12 全部（含 OOP/递归/搜索，Week11-12 的新内容）</div>
-        <div class="drow">IQX = Masonic Hall，不在主校区，提前踩点</div>
-      </div>
-    </div>
-    <div class="card float" style="animation-delay:-2.6s">
-      <div class="row"><span class="tag">11 / 30 · 周一</span><span class="pill info">杂项</span></div>
-      <h3>INDG1000 · Part 3 课程反馈</h3>
-      <p>23:59 截止 (UTC+8)。全校必修的 Indigenous Studies Essentials 模块，不占专业课分但不做会挂在记录上。花十几分钟点完即可。</p>
-    </div>
+
     </div>
 
   <div class="eyebrow">待办 · Todo</div>
@@ -395,7 +370,7 @@
   }
 
   const ck=document.getElementById('ck'), dk=document.getElementById('dk'), cd=document.getElementById('cd');
-  const target=new Date(2026,8,21,9,0,0);
+  const target=new Date(2026,10,30,23,59,0);
   function tick(){
     const now=new Date();
     ck.textContent=now.toTimeString().slice(0,5);
